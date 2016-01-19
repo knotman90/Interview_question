@@ -7,6 +7,7 @@
 //============================================================================
 
 #include <iostream>
+#include <memory>
 using namespace std;
 
 namespace SingleLinkedList{
@@ -74,10 +75,14 @@ class Node{
 
 };
 
-
-
+std::shared_ptr<Node> ll;
+void TestLinkedList(){
 
 }
+
+}
+
+
 
 
 

@@ -75,10 +75,7 @@ class Node{
 
 };
 
-std::shared_ptr<Node> ll;
-void TestLinkedList(){
 
-}
 
 }
 

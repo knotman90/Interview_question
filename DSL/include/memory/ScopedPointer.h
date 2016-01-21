@@ -8,7 +8,7 @@
 #ifndef SCOPEDPOINTER_H_
 #define SCOPEDPOINTER_H_
 
-#include <Utility.h>
+#include <common/utility.h>
 
 namespace DSL{
 

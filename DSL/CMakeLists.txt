@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 cmake_policy(SET CMP0048 NEW)
+
 include(configure.cmake)
 
 
@@ -45,7 +46,7 @@ set_target_properties(DSL PROPERTIES VERSION "${DSL_VERSION}" SOVERSION "${DSL_M
 target_compile_features(DSL PRIVATE cxx_deleted_functions)
 
 if(${BUILD_TESTS} STREQUAL "ON")
-        #subdirectory_add(tests)
+       add_subdirectory(tests)
         #install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL)
 endif()
 

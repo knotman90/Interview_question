@@ -61,7 +61,9 @@ inline bool operator!=(const sequential_forward_iterator &o) const { return m_i 
 //pre-increment operator (return a reference)
 inline sequential_forward_iterator &operator++() { m_i = m_i->next(); return *this; }
 //post-increment operator (return a value)
+
 inline sequential_forward_iterator operator++(int) { sequential_forward_iterator n = *this; m_i = m_i->next(); return n; }
+
 
 
 protected:
@@ -155,7 +157,11 @@ class random_access_iterator : public forward_iterator {
 
 };
 
+<<<<<<< HEAD
 
+=======
+*/
+>>>>>>> 8d38661e8a736cb657518e6c75bf361699c8656f
 }
 
 #endif /* ITERATOR_H_ */

@@ -11,16 +11,49 @@
 #include <list>
 namespace DSL{
 
-template<class T>
+template<class T, class C = uint>
 class SingleLinkedList {
+
+protected:
+ DSL::deallocator<T> d;
+
+template<class Y>
+struct node {
+friend SingleLinkedList<T,C>;
+
+	explicit node(T& v) : value(v), next(nullptr) {}
+	~node(){ };
+	void destroy(DSL::deallocator<T> d){
+		d(value);
+	}
+	bool operator==(const node &n) const{
+		return n->value==this->value;
+	}
+	bool operator!=(const node &n) const{
+		return !(*this==n);
+	}
+
+
+	node<T>* next;
+	T value;
+};
+
+node<T>* _head;
+C _count;
 
 
 public:
-	SingleLinkedList();
-	virtual ~SingleLinkedList();
+	explicit SingleLinkedList():  _count(0), _head(nullptr), d(DSL::noOpDeallocator) {}
+	virtual ~SingleLinkedList(){
+			this->clear();
+	}
 
-	bool isEmpty() const;
-	int size() const;
+	bool isEmpty() const{
+		return _count==0;
+	}
+	int size() const{
+		return _count;
+	}
 
 	bool operator==(const SingleLinkedList<T> &l) const;
 	inline bool operator!=(const SingleLinkedList<T> &l)const
@@ -28,7 +61,16 @@ public:
 		return !(*this==l);
 		}
 
-	void clear();
+	void clear(){
+		node<T>* n = nullptr;
+		while(_head != nullptr){
+			n = _head->next;
+			_head->destroy(d);
+			_head=n;
+			_count--;
+		}
+		_head=nullptr;
+	}
 
 	void append(const T&);
 	void prepend(const T&);

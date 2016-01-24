@@ -8,16 +8,14 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${GTEST_INCLUDE_DIRS})
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB SRC
     "*.h"
     "*.cpp"
 )
-
 
 add_executable(tests ${SRC})
 target_compile_features(tests PRIVATE cxx_deleted_functions)

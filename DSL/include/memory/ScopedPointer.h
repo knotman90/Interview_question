@@ -23,7 +23,7 @@ public:
 			delete pointer;
 	};
 	T * operator->() const {return pointer;};
-	T & operator*() const {return pointer;};
+	T & operator*() const {return *pointer;};
 
 
 

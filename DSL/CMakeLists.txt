@@ -39,7 +39,7 @@ file(GLOB SRC_COMMON
     "source/common/*.cpp"
 )
 
-message(status,${SRC_LIST} )
+message(status,${SRC_COMMON} )
 add_library(DSL ${SHAREDORSTATIC} ${SRC_MEMORY} ${COMMON_SRC} ${SRC_LIST})
 set_target_properties(DSL PROPERTIES VERSION "${DSL_VERSION}" SOVERSION "${DSL_MAJOR_VERSION}" LINKER_LANGUAGE CXX)
 

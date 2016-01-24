@@ -8,51 +8,63 @@
 #ifndef SINGLELINKEDLIST_H_
 #define SINGLELINKEDLIST_H_
 
-#include <list>
+
+#include <assert.h>
+#include <common/iterator.h>
 namespace DSL{
 
-template<class T, class C = uint>
+
+
+typedef unsigned int uint;
+
+
+/*! \brief Singly Linked List implementation.
+ *         The second template parameter is used as type of the  Lists's size.
+ *
+ */
+template<typename T, typename C = uint>
 class SingleLinkedList {
 
 protected:
- DSL::deallocator<T> d;
 
-template<class Y>
-struct node {
-friend SingleLinkedList<T,C>;
+  /**
+  Node Class
+  */
+template<typename Y>
+  class node : public forward_iterable<T> {
+   friend SingleLinkedList<T,C>;
+    node<T>* next() { return this; }
+    T* pointer() { return &value; }
 
-	explicit node(T& v) : value(v), next(nullptr) {}
-	~node(){ };
-	void destroy(DSL::deallocator<T> d){
-		d(value);
-	}
-	bool operator==(const node &n) const{
-		return n->value==this->value;
-	}
-	bool operator!=(const node &n) const{
-		return !(*this==n);
-	}
+  	explicit node(T& v) : value(v), m_next(nullptr) {}
+  	~node(){ };
 
+  	inline bool operator==(const node &n) const{
+  		return n->value==this->value;
+  	}
+  	inline bool operator!=(const node &n) const{
+  		return !(*this==n);
+  	}
 
-	node<T>* next;
-	T value;
-};
+  	node<T>* m_next;
+  	T value;
+  };
 
-node<T>* _head;
-C _count;
-
+node<T>* m_head;
+node<T>* m_tail;
+C m_count;
 
 public:
-	explicit SingleLinkedList():  _count(0), _head(nullptr), d(DSL::noOpDeallocator) {}
+	explicit SingleLinkedList():  m_count(0), m_head(nullptr) , m_tail(nullptr) {}
 	virtual ~SingleLinkedList(){
 			this->clear();
 	}
 
-	bool isEmpty() const{
-		return _count==0;
+	inline bool isEmpty() const{
+		return m_count==0;
 	}
-	int size() const{
-		return _count;
+	inline int size() const{
+		return m_count;
 	}
 
 	bool operator==(const SingleLinkedList<T> &l) const;
@@ -63,18 +75,51 @@ public:
 
 	void clear(){
 		node<T>* n = nullptr;
-		while(_head != nullptr){
-			n = _head->next;
-			_head->destroy(d);
-			_head=n;
-			_count--;
+		while(m_head != nullptr){
+			n = m_head->m_next;
+			delete m_head;
+			m_head=n;
+			m_count--;
 		}
-		_head=nullptr;
+		m_head=nullptr;
 	}
 
-	void append(const T&);
-	void prepend(const T&);
-	T takeFirst();
+	void append(const T& v){
+    node<T>* n = new node<T>(v);
+    if(isEmpty){
+      m_head = n;
+      m_tail = n;
+    }else{
+      m_tail->m_next = n;
+      m_tail = n;
+    }
+    count++;
+  }
+	void prepend(const T& v){
+      node<T>* n = new node<T>(v);
+      if(isEmpty){
+        m_head = n;
+        m_tail = n;
+      }else{
+        n->m_next = m_head;
+        m_head = n;
+      }
+  }
+
+  T first(){
+    DSL_ASSERT(isEmpty());
+    return *m_head;
+  }
+
+  T erase(){
+
+  }
+
+	T takeFirst(){
+    T elem = first();
+    erase(m_head);
+  }
+
 	T takeLast();
 	int removeAll(const T &t);
 	bool removeOne(const T &t);

@@ -8,15 +8,13 @@
 #ifndef ITERATOR_H_
 #define ITERATOR_H_
 
-#include <common/utility.h>
-
 namespace DSL{
 
 template<typename T>
 class forward_iterable {
 public:
-  forward_iterable();
-  virtual ~forward_iterable();
+  forward_iterable() {};
+  virtual ~forward_iterable(){};
   virtual forward_iterable<T>* next() = 0;
   inline T& value(){
     return *(pointer());

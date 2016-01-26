@@ -11,6 +11,9 @@
 
 #include <assert.h>
 #include <common/iterator.h>
+#include <common/utility.h>
+#include <common/assert.h>
+
 namespace DSL {
 
 
@@ -40,7 +43,7 @@ T* pointer() {
         return &value;
 }
 
-explicit node(T& v) : value(v), m_next(nullptr) {
+explicit node( T& v) : value(v), m_next(nullptr) {
 }
 ~node(){
 };
@@ -117,16 +120,16 @@ void clear(){
         m_tail = nullptr;
 }
 
-void append(const T& v){
+void append( T& v){
         node<T>* n = new node<T>(v);
-        if(isEmpty) {
+        if(isEmpty()) {
                 m_head = n;
                 m_tail = n;
         }else{
                 m_tail->m_next = n;
                 m_tail = n;
         }
-        count++;
+        m_count++;
 }
 void prepend(const T& v){
         node<T>* n = new node<T>(v);
@@ -140,35 +143,73 @@ void prepend(const T& v){
 }
 
 T first(){
-        DSL_ASSERT(isEmpty());
-        return *m_head;
+        DSL_ASSERT( !isEmpty() );
+        return m_head->value;
+}
+
+T takeTheOnlyOneElement(){
+        DSL_ASSERT( !m_count == 1 );
+        T val = m_head->value;
+        delete m_head;
+        m_head == m_tail == nullptr;
+        return val;
 }
 
 T last(){
-        DSL_ASSERT(isEmpty());
-        return *m_tail;
+        DSL_ASSERT( !isEmpty() );
+
 }
 
 
 
 T takeFirst(){
+        DSL_ASSERT( !isEmpty() );
+        if(m_count == 1) {
+                return takeTheOnlyOneElement();
+        }
         T elem = first();
-        erase(m_head);
+
+        node<T>* head_next = m_head->m_next;
+
+        delete m_head;
+        m_count--;
+
+        m_head = head_next;
+
+        return elem;
 }
 
 T takeLast(){
-        T elem = last();
+        if(m_count == 1) {
+                return takeTheOnlyOneElement();
+        }
 
+        T elem = last();
+        node<T> next_to_last = m_head;
+
+        //size >= 2
+        while( next_to_last->m_next != m_tail)
+                next_to_last = next_to_last->next;
+
+        delete m_tail;
+        count--;
+        m_tail = next_to_last;
+
+        return elem;
 }
+
 int removeAll(const T &t);
 bool removeOne(const T &t);
-bool contains(const T &t) const;
+
+bool contains(const T &t) const {
+
+}
 
 template <typename D>
-int count(const T &t) const{
-    auto count_if = [&](const D acc, const T val) { if (val == t) return acc+1; return acc;};
-    D count = fold(begin(),end(),0, count_if );
-    return count;
+int count(const T &t) const {
+        auto count_if = [&](const D acc, const T val) { if (val == t) return acc+1; return acc; };
+        D count = fold(begin(),end(),0, count_if );
+        return count;
 
 }
 };

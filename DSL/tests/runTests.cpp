@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include <ScopedPointer_test.h>
+//#include <ScopedPointer_test.h>
 
 #include <LinkedList_test.h>
-#include <common/iterator.h>
+
 
 int main(int argc, char** argv){
 DSL::SingleLinkedList<int> p;

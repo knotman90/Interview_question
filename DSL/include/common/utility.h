@@ -24,8 +24,8 @@ Iterator find_if(Iterator s, Iterator e, Lambda predicate){
 }
 
 //Lambda has type: D -> T -> D
-template<typename T , typename D ,
-		typename Iterator = sequential_forward_iterator<T> ,
+template<typename Payload , typename D ,
+		typename Iterator,
 		typename Lambda>
 D fold(const Iterator s,const Iterator e, const D a, Lambda l){
 	D acc = a ;

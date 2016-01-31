@@ -7,15 +7,16 @@
 #ifndef ASSERT_H_
 #define ASSERT_H_
 
+
 #ifndef NDEBUG
 #include <cassert>
-#define DSL_ASSERT(condition) \
+#define DSL_ASSERT( condition) \
 do { \
         if(!(condition)) \
         { \
                 std::cerr << "Assertion failed at " << __FILE__ << ":" << __LINE__; \
                 std::cerr << " inside " << __FUNCTION__ << std::endl; \
-                std::cerr << "Condition: " << condition; \
+                std::cerr << "Condition: " << (condition); \
                 abort(); \
         } \
 } while(0);

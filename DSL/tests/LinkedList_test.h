@@ -2,12 +2,13 @@
 #include <list/SingleLinkedList.h>
 
 
+
 class SinleLinkedListTest : public ::testing::Test {
 
 protected:
-const int SIZE = 1000;
+const int SIZE = 10000;
 
-DSL::SingleLinkedList<int> LL;
+DSL::SingleLinkedList<int,uint> LL;
 
 void SetUp(){
     int a=3;
@@ -29,11 +30,36 @@ TEST_F(SinleLinkedListTest, takeFirst){
         ASSERT_EQ(LL.size(),i);
         int v=LL.takeFirst();
         i--;
-
-
     }
 
 }
+
+
+TEST_F(SinleLinkedListTest, takeLast){
+    ASSERT_EQ(LL.size(),SIZE);
+    int i = SIZE;
+    while(i){
+
+        ASSERT_EQ(LL.size(),i);
+        int v=LL.takeLast();
+        i--;
+    }
+
+}
+
+TEST_F(SinleLinkedListTest, removeOne){
+    ASSERT_EQ(LL.size(),SIZE);
+    int i = SIZE;
+    while(false){
+
+
+        ASSERT_EQ(LL.size(),i);
+        int v=LL.removeOne(i);
+        i--;
+    }
+}
+
+
 /*
 typedef ::testing::Types<char, int, unsigned int> types;
 TYPED_TEST_CASE(SingleLinkedListTest, types);

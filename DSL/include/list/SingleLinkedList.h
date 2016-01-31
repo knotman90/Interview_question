@@ -25,7 +25,10 @@ typedef unsigned int uint;
  *         The second template parameter is used as type of the  Lists's size.
  *
  */
-template<typename T, typename C = uint>
+template<typename T, typename C = int,
+            template <typename ,
+                    template<typename, typename...> class _Iterable, typename... Args> class _Iterator = forward_iterator
+     >
 class SingleLinkedList {
 
 protected:
@@ -35,29 +38,36 @@ protected:
  */
 template<typename Y>
 class node : public forward_iterable<T> {
-friend SingleLinkedList<T,C>;
+
+friend SingleLinkedList;
+public:
 node<T>* next() {
         return m_next;
 }
-T* pointer() {
-        return &value;
+
+virtual  T& value(){
+        return m_value;
 }
 
-explicit node( T& v) : value(v), m_next(nullptr) {
+explicit node( T& v) : m_value(v), m_next(nullptr) {
 }
 ~node(){
 };
 
 inline bool operator==(const node &n) const {
-        return n->value==this->value;
+        return n->m_value==this->m_value;
 }
 inline bool operator!=(const node &n) const {
         return !(*this==n);
 }
 
+
+
 node<T>* m_next;
-T value;
+T m_value;
 };
+
+typedef _Iterator<T, node> Iterator;
 
 node<T>* m_head;
 node<T>* m_tail;
@@ -77,26 +87,30 @@ inline int size() const {
         return m_count;
 }
 
-bool operator==(const SingleLinkedList<T> &l) const;
-inline bool operator!=(const SingleLinkedList<T> &l) const
+bool operator==(const SingleLinkedList &l) const;
+inline bool operator!=(const SingleLinkedList &l) const
 {
         return !(*this==l);
 }
 
-forward_iterator<T> begin(){
-        forward_iterator<T> fi(m_head);
+
+forward_iterator<T, node> begin(){
+        forward_iterator<T, node> fi(m_head);
         return fi;
 }
 
-forward_iterator<T> end(){
-        forward_iterator<T> fi(m_tail);
+
+Iterator end(){
+        Iterator fi(m_tail);
         return fi;
 }
+
+
 void clear_via_iterator(){
-        forward_iterator<T> i = begin();
-        forward_iterator<T> e = end();
+        Iterator i = begin();
+        Iterator e = end();
         while(i != e) {
-                forward_iterator<T> n = i+1; //iterator advance
+                Iterator n = i+1; //iterator advance
                 delete &i; //pointer to the iterator payload
                 i = n;
         }
@@ -131,6 +145,7 @@ void append( T& v){
         }
         m_count++;
 }
+
 void prepend(const T& v){
         node<T>* n = new node<T>(v);
         if(isEmpty) {
@@ -144,14 +159,14 @@ void prepend(const T& v){
 
 T first(){
         DSL_ASSERT( !isEmpty() );
-        return m_head->value;
+        return m_head->m_value;
 }
 
 T takeTheOnlyOneElement(){
-        DSL_ASSERT( !m_count == 1 );
-        T val = m_head->value;
+        DSL_ASSERT( m_count == 1 );
+        T val = m_head->m_value;
         delete m_head;
-        m_head == m_tail == nullptr;
+        m_head = m_tail = nullptr;
         return val;
 }
 
@@ -185,21 +200,31 @@ T takeLast(){
         }
 
         T elem = last();
-        node<T> next_to_last = m_head;
+        node<T>* next_to_last = m_head;
 
         //size >= 2
         while( next_to_last->m_next != m_tail)
-                next_to_last = next_to_last->next;
+                next_to_last = next_to_last->m_next;
 
         delete m_tail;
-        count--;
+        m_count--;
         m_tail = next_to_last;
 
         return elem;
 }
 
 int removeAll(const T &t);
-bool removeOne(const T &t);
+
+
+bool removeOne(const T &t){
+        /*
+        for(auto it = begin(); it != end(); it++) {
+                if(*it == t) {
+                    Iterable* del_next = it->next();
+
+                }
+        }*/
+}
 
 bool contains(const T &t) const {
 

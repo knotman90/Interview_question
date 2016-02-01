@@ -3,6 +3,7 @@ compiler: g++
 
 
 before_install:
+- sudo apt-get -qq install libgtest0 libgtest-dev 
 
 
 

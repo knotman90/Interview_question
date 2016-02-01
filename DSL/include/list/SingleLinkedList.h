@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <common/iterator.h>
+#include <algorithm/algorithm.h>
 #include <common/utility.h>
 #include <common/assert.h>
 
@@ -94,13 +95,13 @@ inline bool operator!=(const SingleLinkedList &l) const
 }
 
 
-forward_iterator<T, node> begin(){
+forward_iterator<T, node> begin() const {
         forward_iterator<T, node> fi(m_head);
         return fi;
 }
 
 
-Iterator end(){
+Iterator end() const  {
         Iterator fi(m_tail);
         return fi;
 }
@@ -217,26 +218,31 @@ int removeAll(const T &t);
 
 
 bool removeOne(const T &t){
-        /*
-        for(auto it = begin(); it != end(); it++) {
-                if(*it == t) {
-                    Iterable* del_next = it->next();
-
-                }
-        }*/
+        node<T> *curr = m_head;
+        node<T> *next = m_head->m_next;
+        while(curr != next){
+          if(next->m_value == t){
+            node<T> *next_next = next->m_next;
+            delete next;
+            curr->m_next = next_next;
+            m_count--;
+            return true;
+          }
+        }
+        return false;
 }
 
 bool contains(const T &t) const {
+//bool contains(const Iterator s, const Iterator e, T value ) const  {
+  return DSL::contains(begin() , end() , t);/*
+  for(auto it = begin(); it != end() ;it++)
+    if(*it == t)
+    return true;
 
+  return false;*/
 }
 
-template <typename D>
-int count(const T &t) const {
-        auto count_if = [&](const D acc, const T val) { if (val == t) return acc+1; return acc; };
-        D count = fold(begin(),end(),0, count_if );
-        return count;
 
-}
 };
 
 

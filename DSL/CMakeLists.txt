@@ -39,8 +39,15 @@ file(GLOB SRC_COMMON
     "source/common/*.cpp"
 )
 
-message(status,${SRC_COMMON} )
-add_library(DSL ${SHAREDORSTATIC} ${SRC_MEMORY} ${COMMON_SRC} ${SRC_LIST})
+file(GLOB SRC_ALGORITHM
+    "include/algorithm/*.h"
+    "source/algorithm/*.cpp"
+)
+
+
+
+message(status,${SRC_ALGORITHM} )
+add_library(DSL ${SHAREDORSTATIC} ${SRC_MEMORY} ${COMMON_SRC} ${SRC_LIST} ${SRC_ALGORITHM})
 set_target_properties(DSL PROPERTIES VERSION "${DSL_VERSION}" SOVERSION "${DSL_MAJOR_VERSION}" LINKER_LANGUAGE CXX)
 
 target_compile_features(DSL PRIVATE cxx_deleted_functions)

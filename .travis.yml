@@ -25,7 +25,7 @@ install:
  - tar xf cmake-3.4.3.tar.gz
  - cd cmake-3.4.3
  - ./configure
- - make -j8
+ - make 
  - sudo make install
  - export PATH=/usr/local/bin:$PATH
  - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -44,4 +44,4 @@ script:
 - mkdir -p build 
 - cd build 
 - cmake ../../DSL/
-- make -j4
+- make 

@@ -9,9 +9,6 @@ before_install:
 
 
 install:
- - sudo apt-get update -qq
- - sudo apt-get install -qq  cmake
- - sudo apt-get upgrade
  - sudo apt-get install build-essential
  - wget https://cmake.org/files/v3.4/cmake-3.4.3.tar.gz
  - tar xf cmake-3.4.3.tar.gz

@@ -11,6 +11,19 @@
 
 namespace DSL {
 
+//this has to be specialized for each class that is SWAPPABLE
+    template< class T >
+    void swap( T& a, T& b ){
+        T a_copy = a;
+        a = b;
+        b = a_copy;
+    }
+
+    template< class T2, size_t N >
+    void swap( T2 (&a)[N], T2 (&b)[N]);
+    //swap ranges
+
+
 // -- Non-modifying sequence operations --
 
     template< typename T ,  typename  Iterator >
@@ -19,6 +32,16 @@ namespace DSL {
         bool ret =  e == find_if(s , e , predicate_equal);
         return !ret;
     }
+
+    //Return value
+    //Iterator to the first element satisfying the condition or last if no such element is found.
+    template<typename Iterator, typename Lambda>
+    inline Iterator find_if_not(  Iterator s, Iterator e, Lambda predicate){
+    	auto not_predicate = [&](auto v){return !predicate(v); };
+        return find_if(s , e , not_predicate);
+
+    }
+
 
     //Return value
     //Iterator to the first element satisfying the condition or last if no such element is found.

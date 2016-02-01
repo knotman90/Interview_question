@@ -72,7 +72,7 @@ public:
 
 //operators
 inline sequential_forward_iterator &operator=(const sequential_forward_iterator &o) { m_i = o.m_i; return *this; }
-inline iterable_pointer operator->(){ return m_i->pointer();}
+inline iterable_pointer operator->(){ return m_i;}
 inline payload_pointer operator&(){ return m_i->pointer();}
 inline payload_reference operator*(){ return m_i->value();}
 

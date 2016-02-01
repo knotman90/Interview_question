@@ -19,4 +19,5 @@ file(GLOB SRC
 
 add_executable(tests ${SRC})
 target_compile_features(tests PRIVATE cxx_deleted_functions)
+set_property(TARGET tests PROPERTY CXX_STANDARD 14)
 target_link_libraries(tests ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)

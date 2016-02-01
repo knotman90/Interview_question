@@ -46,9 +46,10 @@ file(GLOB SRC_ALGORITHM
 
 
 
-message(status,${SRC_ALGORITHM} )
+
 add_library(DSL ${SHAREDORSTATIC} ${SRC_MEMORY} ${COMMON_SRC} ${SRC_LIST} ${SRC_ALGORITHM})
 set_target_properties(DSL PROPERTIES VERSION "${DSL_VERSION}" SOVERSION "${DSL_MAJOR_VERSION}" LINKER_LANGUAGE CXX)
+set_property(TARGET DSL PROPERTY CXX_STANDARD 14)
 
 target_compile_features(DSL PRIVATE cxx_deleted_functions)
 

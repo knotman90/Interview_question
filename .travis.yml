@@ -25,10 +25,11 @@ before_script:
 - cmake --version
 - gcc --version
 - g++ --version
+- cd Interview_question
 
 
 script:
-- cd /home/travis/knotman90/Interview_question/DSL
+- cd DSL
 - mkdir -p build 
 - cd build 
 - cmake ..

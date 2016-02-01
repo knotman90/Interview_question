@@ -31,5 +31,5 @@ script:
 - echo `pwd`
 - mkdir -p build 
 - cd build 
-- cmake ../DSL/
+- cmake ../../DSL/
 - make -j4

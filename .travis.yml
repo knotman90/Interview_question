@@ -1,5 +1,7 @@
 language: cpp
-compiler: g++
+compiler: 
+ - g++
+ - clang
 
 
 before_install:
@@ -26,7 +28,7 @@ before_script:
 
 
 script:
-- cd knotman90/Interview_question/DSL
+- cd /home/travis/knotman90/Interview_question/DSL
 - mkdir -p build 
 - cd build 
 - cmake ..

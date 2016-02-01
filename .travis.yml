@@ -8,13 +8,7 @@ before_install:
 
 
 install:
- - sudo apt-get install build-essential
- - wget --no-check-certificate https://cmake.org/files/v3.4/cmake-3.4.3.tar.gz
- - tar xf cmake-3.4.3.tar.gz
- - cd cmake-3.4.3
- - ./configure
- - make -j8
- - sudo make install
+ 
  - export PATH=/usr/local/bin:$PATH
  - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
@@ -23,7 +17,8 @@ before_script:
 - cmake --version
 - gcc --version
 - g++ --version
-- cd Interview_question
+- echo `pwd`
+- cd DSL
 
 
 script:

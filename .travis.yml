@@ -1,7 +1,5 @@
 language: cpp
-compiler: 
-- g++
-- clang
+compiler: g++
 
 
 before_install:

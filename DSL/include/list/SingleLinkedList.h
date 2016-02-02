@@ -168,6 +168,7 @@ T takeTheOnlyOneElement(){
         T val = m_head->m_value;
         delete m_head;
         m_head = m_tail = nullptr;
+        m_count--;
         return val;
 }
 

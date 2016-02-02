@@ -3,13 +3,13 @@
  *
  *  Created on: 18 gen 2016
  *      Author: Davide Spataro
-
  */
 
 #ifndef ALGORITHM_H_
 #define ALGORITHM_H_
 
 namespace DSL {
+
 
 //this has to be specialized for each class that is SWAPPABLE
     template< class T >
@@ -22,6 +22,8 @@ namespace DSL {
     template< class T2, size_t N >
     void swap( T2 (&a)[N], T2 (&b)[N]);
     //swap ranges
+
+
 
 
 // -- Non-modifying sequence operations --
@@ -59,18 +61,22 @@ namespace DSL {
 
 template<typename Iterator, typename Lambda>
 bool all_of(Iterator s , Iterator e , Lambda predicate){
-    while(s != e)
+    while(s != e){
         if(!predicate(*s))
             return false;
+        s++;
+    }
 
     return true;
 }
 
 template<typename Iterator, typename Lambda>
 bool any_of(Iterator s , Iterator e , Lambda predicate){
-    while(s != e)
+    while(s != e) {
         if(predicate(*s))
             return true;
+        s++;
+    }
 
     return false;
 }
@@ -81,32 +87,35 @@ bool none_of(Iterator s , Iterator e , Lambda predicate){
 }
 
 
-template<typename Iterator, typename T, typename D = int>
-D count(Iterator s , Iterator e , const T &t)  {
-        auto count_equal = [&](const D acc, const T val) { if (val == t) return acc+1; return acc; };
-        return count_if(s , e , 0 , count_equal);
 
-}
-
-
-template<typename Iterator, typename T, typename Lambda, typename D = int>
-D count(Iterator s , Iterator e , Lambda unary_predicate)  {
-        D count = fold(s , e , 0 , unary_predicate );
+//D can't be deduced
+template<typename D = int, typename Iterator,  typename Lambda>
+D count_if(Iterator s , Iterator e , Lambda unary_predicate)  {
+        auto f = [&]( D &acc, auto &val) {
+            unary_predicate(val) ? acc++ : acc ;
+            return  acc;
+        };
+        D count = fold(s , e , 0 , f );
         return count;
+    }
+
+template< typename D = int, typename Iterator, typename T>
+D count(Iterator s , Iterator e , const T &t)  {
+        auto count_equal = [&](const D &acc, const T &val) { if (val == t) return acc+1; return acc; };
+        return count_if(s , e  , count_equal);
 
 }
-
 
     //Lambda has type: D -> T -> D
-    template<typename Payload , typename D ,
+    template<typename D ,
     		typename Iterator,
     		typename Lambda>
-    D fold(const Iterator s,const Iterator e, const D a, Lambda l){
+    D fold( Iterator s, Iterator e, const D &a, Lambda l){
     	D acc = a ;
-    	Iterator n = s;
-    	while(n != e)
-    		 acc = l(acc,s++);
-
+    	while(s != e){
+    		 acc = l(acc,*s);
+             s++;
+         }
     	return acc;
     }
 

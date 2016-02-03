@@ -1,5 +1,5 @@
 language: cpp
-compiler: g++
+compiler: clang++
 
 
 before_install:
@@ -41,6 +41,7 @@ before_script:
 
 
 script:
+- export CXX="clang++"
 - echo `ls -lah`
 - echo `pwd`
 - mkdir -p build 

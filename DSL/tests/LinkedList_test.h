@@ -4,14 +4,19 @@
 
 
 
-class SinleLinkedListTest : public ::testing::Test {
+
+using ::testing::TestWithParam;
+using ::testing::Values;
+
+class SinleLinkedListTest : public ::testing::TestWithParam<int> {
 
 protected:
-const int SIZE = 10000 ;
+ int SIZE = 10000 ;
 
 DSL::SingleLinkedList<int,uint> LL;
 
 void SetUp(){
+    SIZE=GetParam();
     int a;
     int DIM = SIZE;
     while(DIM--){
@@ -22,7 +27,16 @@ void SetUp(){
 
 };
 
-TEST_F(SinleLinkedListTest, takeFirst){
+// Here, we instantiate our tests with a list of two PrimeTable object
+// factory functions:
+INSTANTIATE_TEST_CASE_P(
+    size_list,
+    SinleLinkedListTest,
+    //Values(0 , 1 , 2 , 3 , 5 , 10 , 100 ,1000 , 10000 )
+Values( 30 , 50 )
+    );
+
+TEST_P(SinleLinkedListTest, takeFirst){
     ASSERT_EQ(LL.size(),SIZE);
     int i = SIZE;
     while(i){
@@ -38,7 +52,7 @@ TEST_F(SinleLinkedListTest, takeFirst){
 }
 
 
-TEST_F(SinleLinkedListTest, takeLast){
+TEST_P(SinleLinkedListTest, takeLast){
     ASSERT_EQ(LL.size(),SIZE);
     int i = SIZE;
     while(i){
@@ -50,10 +64,10 @@ TEST_F(SinleLinkedListTest, takeLast){
 
 }
 
-TEST_F(SinleLinkedListTest, contains){
+TEST_P(SinleLinkedListTest, contains){
     ASSERT_EQ(LL.size(),SIZE);
     int i = SIZE-1;
-    while(i){
+    while(i > 0){
         ASSERT_EQ(true, LL.contains(i));
         i--;
     }
@@ -78,6 +92,8 @@ bool isPrime(T num){
 }
 
 int numPrimesUpTo(const int N){
+    if(N <= 1) //N = 1 means there is only 0 in the list. N number from 0
+        return 0;
     int np=1;//one is prime count it here
     for(int i=3;i<N;i+=2){
         if(isPrime(i))
@@ -87,7 +103,7 @@ int numPrimesUpTo(const int N){
 }
 
 //counts the number of primes from 0 to SIZE
-TEST_F(SinleLinkedListTest, algorithm_count_if){
+TEST_P(SinleLinkedListTest, algorithm_count_if){
         const int NPRIMES=numPrimesUpTo(SIZE); //change according to SIZE
         int val = DSL::count_if(LL.begin() , LL.end() , isPrime<int> );
         printf("\t\tpi([0,%i]) = %i | FOUND = %i\n", SIZE , NPRIMES , val);
@@ -95,52 +111,71 @@ TEST_F(SinleLinkedListTest, algorithm_count_if){
         EXPECT_EQ(val, NPRIMES) << "pi([0," <<SIZE<<"]) = "<<NPRIMES<<" | FOUND = "<<val;
     }
 
-TEST_F(SinleLinkedListTest, algorithm_find__if){
+TEST_P(SinleLinkedListTest, algorithm_find__if){
     int i = SIZE-1;
+    auto f = [&](int val) {return val==i;};
+    if(SIZE == 0) {
+        auto it =  DSL::find_if(LL.begin() , LL.end() , f);
+        ASSERT_EQ(LL.end() , it );
+        return;
+    }
     while(i){
-        auto f = [&](int val) {return val==i;};
+
         int val = *( DSL::find_if(LL.begin() , LL.end() , f) );
         ASSERT_EQ(val, i);
         i--;
     }
 }
 
-TEST_F(SinleLinkedListTest, algorithm_all_of_any_of){
-        int l=0, h=SIZE;
-        auto f = [&](const int &val){
-            return (val >= l && val <= h);
-        };
+TEST_P(SinleLinkedListTest, algorithm_any_of){
+    int l=0, h=SIZE;
+    auto f = [&](const int &val){
+        return (val >= l && val <= h);
+    };
+
+    if(SIZE==0)
+        ASSERT_EQ(DSL::any_of(LL.begin() , LL.end() , f), false);
+    else{
+        bool any = DSL::any_of(LL.begin() , LL.end() , f);
+        ASSERT_EQ(any,true);
+
+    }
+}
+
+
+TEST_P(SinleLinkedListTest, algorithm_all_of_any_of){
+    int l=0, h=SIZE;
+    auto f = [&](const int &val){
+        return (val >= l && val <= h);
+    };
+
+    if(SIZE==0){
+
+        ASSERT_EQ( DSL::all_of(LL.begin() , LL.end() , f),true);
+        ASSERT_EQ(DSL::any_of(LL.begin() , LL.end() , f), false);
+    }else{
 
 
         bool val = DSL::all_of(LL.begin() , LL.end() , f);
         ASSERT_EQ(val,true);
 
-        bool any = DSL::any_of(LL.begin() , LL.end() , f);
-        ASSERT_EQ(any,true);
-
-        //now set h and l out of range
+            //now set h and l out of range
         l =2;//one is out of range because is 0
         val = DSL::all_of(LL.begin() , LL.end() , f);
         ASSERT_EQ(val,false);
 
-        any = DSL::any_of(LL.begin() , LL.end() , f);
-        ASSERT_EQ(any,true);
+
 
         h =SIZE-1;//one is out of range because is SIZE
         val = DSL::all_of(LL.begin() , LL.end() , f);
         ASSERT_EQ(val,false);
 
-        any = DSL::any_of(LL.begin() , LL.end() , f);
-        ASSERT_EQ(any,true);
+
 
         l =2;
         h =SIZE-1;
         val = DSL::all_of(LL.begin() , LL.end() , f);
         ASSERT_EQ(val,false);
-
-        any = DSL::any_of(LL.begin() , LL.end() , f);
-        ASSERT_EQ(any,true);
-
 
         l = -SIZE;
         h = -2*SIZE;
@@ -148,18 +183,18 @@ TEST_F(SinleLinkedListTest, algorithm_all_of_any_of){
         val = DSL::all_of(LL.begin() , LL.end() , f);
         ASSERT_EQ(val,false);
 
-        any = DSL::any_of(LL.begin() , LL.end() , f);
-        ASSERT_EQ(any,false);
+    }
 }
 
 
 
 
-TEST_F(SinleLinkedListTest, removeOne){
+TEST_P(SinleLinkedListTest, removeOne){
     int i = SIZE;
-    while(false){
+    while(i> 3){
         ASSERT_EQ(LL.size(),i);
         int v=LL.removeOne(i);
+        ASSERT_EQ(LL.size(),i-1);
         i--;
     }
 }

@@ -102,7 +102,9 @@ forward_iterator<T, node> begin() const {
 
 
 Iterator end() const  {
-        Iterator fi(m_tail);
+        //Iterator fi(m_tail);
+        auto e = m_tail == nullptr ? nullptr : m_tail->next();
+        Iterator fi (e);
         return fi;
 }
 
@@ -125,6 +127,7 @@ void clear_via_iterator(){
 }
 void clear(){
         node<T>* n = nullptr;
+        int i=0;
         while(m_head != nullptr) {
                 n = m_head->m_next;
                 delete m_head;
@@ -149,7 +152,7 @@ void append( T& v){
 
 void prepend(const T& v){
         node<T>* n = new node<T>(v);
-        if(isEmpty) {
+        if(isEmpty()) {
                 m_head = n;
                 m_tail = n;
         }else{
@@ -174,6 +177,7 @@ T takeTheOnlyOneElement(){
 
 T last(){
         DSL_ASSERT( !isEmpty() );
+        return m_tail->m_value;
 
 }
 
@@ -215,10 +219,30 @@ T takeLast(){
         return elem;
 }
 
-int removeAll(const T &t);
+
+//use fold when backwards iterator are present
+int removeAll(const T &t){
+    uint n_rem = 0;
+    node<T> *curr = m_head;
+    node<T> *next = m_head->m_next;
+    while(curr != next){
+      if(next->m_value == t){
+        node<T> *next_next = next->m_next;
+        delete next;
+        curr->m_next = next_next;
+        m_count--;
+        ++n_rem;
+      }
+    }
+    return n_rem;
+}
+
 
 
 bool removeOne(const T &t){
+        if(isEmpty())
+            return false;
+        std::cout<<"here"<<size()<<std::endl;
         node<T> *curr = m_head;
         node<T> *next = m_head->m_next;
         while(curr != next){
@@ -229,6 +253,8 @@ bool removeOne(const T &t){
             m_count--;
             return true;
           }
+          curr = next;
+          next = next ->m_next;
         }
         return false;
 }

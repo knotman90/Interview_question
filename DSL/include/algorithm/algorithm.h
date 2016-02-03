@@ -66,7 +66,6 @@ bool all_of(Iterator s , Iterator e , Lambda predicate){
             return false;
         s++;
     }
-
     return true;
 }
 
@@ -113,6 +112,7 @@ D count(Iterator s , Iterator e , const T &t)  {
     D fold( Iterator s, Iterator e, const D &a, Lambda l){
     	D acc = a ;
     	while(s != e){
+        
     		 acc = l(acc,*s);
              s++;
          }

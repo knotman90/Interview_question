@@ -3,6 +3,7 @@
 //#include <ScopedPointer_test.h>
 
 #include <LinkedList_test.h>
+#include <pair_test.h>
 
 
 int main(int argc, char** argv){

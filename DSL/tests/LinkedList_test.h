@@ -17,11 +17,10 @@ DSL::SingleLinkedList<int,uint> LL;
 
 void SetUp(){
     SIZE=GetParam();
-    int a;
-    int DIM = SIZE;
-    while(DIM--){
-        a = DIM;
-        LL.append(a);
+    int i=1;
+    while(i <= SIZE){ //numbers [0 , SIZE)
+        LL.append(i);
+        i++;
     }
 }
 
@@ -32,18 +31,25 @@ void SetUp(){
 INSTANTIATE_TEST_CASE_P(
     size_list,
     SinleLinkedListTest,
-    //Values(0 , 1 , 2 , 3 , 5 , 10 , 100 ,1000 , 10000 )
-Values( 10 , 11 , 12, 13,10, 50 )
+    Values(0 , 1 , 2 , 3 , 5 , 10 , 100 ,1000 , 10000 )
+//Values( 0 , 1 , 2, 3, 6 )
     );
 
 TEST_P(SinleLinkedListTest, takeFirst){
     ASSERT_EQ(LL.size(),SIZE);
-    int i = SIZE;
-    while(i){
+    int rem =0;
+    int i = 1;
 
-        ASSERT_EQ(LL.size(),i);
+    while(i <= SIZE){
+        //std::cout<<"hi\n";
+        ASSERT_EQ(LL.size(),SIZE-rem);
+
         int v=LL.takeFirst();
-        i--;
+        rem++;
+        ASSERT_EQ(LL.size(),SIZE-rem);
+        ASSERT_EQ(v,i);
+        i++;
+
     }
     ASSERT_EQ(LL.size(),0);
     ASSERT_EQ(LL.isEmpty(),true);
@@ -92,10 +98,10 @@ bool isPrime(T num){
 }
 
 int numPrimesUpTo(const int N){
-    if(N <= 1) //N = 1 means there is only 0 in the list. N number from 0
+    if(N <=0)
         return 0;
     int np=1;//one is prime count it here
-    for(int i=3;i<N;i+=2){
+    for(int i=3;i<=N;i+=2){
         if(isPrime(i))
             np++;
     }
@@ -104,6 +110,7 @@ int numPrimesUpTo(const int N){
 
 //counts the number of primes from 0 to SIZE
 TEST_P(SinleLinkedListTest, algorithm_count_if){
+    
         const int NPRIMES=numPrimesUpTo(SIZE); //change according to SIZE
         int val = DSL::count_if(LL.begin() , LL.end() , isPrime<int> );
         printf("\t\tpi([0,%i]) = %i | FOUND = %i\n", SIZE , NPRIMES , val);
@@ -190,17 +197,21 @@ TEST_P(SinleLinkedListTest, algorithm_all_of_any_of){
 
 
 TEST_P(SinleLinkedListTest, removeOne){
-    int i = 2;
-    while(i < SIZE){
-        std::cout<<"looking for "<<i<<std::endl;
-        DSL::print(LL.begin(), LL.end());
-        bool cont = LL.contains(i);
-       bool rem = LL.removeOne(i);
 
+    int i = 0;
+    int n_rem =0;
+    int original_size=LL.size();
+    while(i <= SIZE){
+        bool cont = LL.contains(i);
+        if(cont)
+            ++n_rem;
+        bool rem = LL.removeOne(i);
         ASSERT_EQ(rem,cont) << SIZE;
-        //ASSERT_EQ(LL.size(),i-1);
+        ASSERT_EQ(LL.size(),original_size-n_rem);
         i++;
     }
+    ASSERT_EQ(LL.size(),0);
+    ASSERT_EQ(LL.size(),original_size-n_rem);
 }
 
 

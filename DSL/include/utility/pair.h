@@ -14,13 +14,12 @@
 namespace DSL {
 template<typename T, typename D>
 class pair {
-private:
 
-
+public:
     T first;
     D second;
 
-public:
+
     pair(const T &f , const D &s) : first(f), second(s){}
     void swap(pair p1){
         const T first_copy = first;
@@ -41,11 +40,12 @@ public:
 
 };
 
-};
+
+
 
 template<typename T , typename D>
-constexpr bool operator!=( const pair<T,D>& lhs, const pair<<T,D>& rhs ){
-    return !(lhs == rhs)
+constexpr bool operator!=( const pair<T,D>& lhs, const pair<T,D>& rhs ){
+    return !(lhs == rhs);
 }
 
 //operators == and < are the minimum complete definition
@@ -62,11 +62,11 @@ bool operator<( const pair<T,D>& lhs, const pair<T,D>& rhs ){
 }
 
 template<typename T, typename D>
-inline make_pair(const T &f , const D &s){
-    return pair(f , d);
+inline pair<T,D>make_pair(const T &f , const D &s){
+    return pair<T , D>(f , s);
 }
 
 
-}
+} //namespace DSL
 
 #endif /* PAIR_H */

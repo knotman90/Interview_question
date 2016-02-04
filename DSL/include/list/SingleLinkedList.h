@@ -19,6 +19,39 @@ namespace DSL {
 
 
 
+    /**
+       Node Class
+     */
+    template<typename T>
+    class node : public forward_iterable<T> {
+
+
+    public:
+    node<T>* next() {
+            return m_next;
+    }
+
+    virtual  T& value(){
+            return m_value;
+    }
+
+    explicit node( T& v) : m_value(v), m_next(nullptr) {
+    }
+    ~node(){
+    };
+
+    inline bool operator==(const node &n) const {
+            return n->m_value==this->m_value;
+    }
+    inline bool operator!=(const node &n) const {
+            return !(*this==n);
+    }
+
+    node<T>* m_next;
+    T m_value;
+    };
+
+
 typedef unsigned int uint;
 
 
@@ -32,41 +65,7 @@ template<typename T, typename C = int,
      >
 class SingleLinkedList {
 
-protected:
 
-/**
-   Node Class
- */
-template<typename Y>
-class node : public forward_iterable<T> {
-
-friend SingleLinkedList;
-public:
-node<T>* next() {
-        return m_next;
-}
-
-virtual  T& value(){
-        return m_value;
-}
-
-explicit node( T& v) : m_value(v), m_next(nullptr) {
-}
-~node(){
-};
-
-inline bool operator==(const node &n) const {
-        return n->m_value==this->m_value;
-}
-inline bool operator!=(const node &n) const {
-        return !(*this==n);
-}
-
-
-
-node<T>* m_next;
-T m_value;
-};
 
 typedef _Iterator<T, node> Iterator;
 
@@ -248,18 +247,18 @@ bool removeOne(const T &t){
             return true;
 
         }else if(size() >= 2){
-            std::cout<<size()<<" "<<std::endl;
-            node<T> *curr = m_head->m_next;
-            node<T> *next = m_head->m_next->m_next;
+            node<T> *curr = m_head;
+            node<T> *next = m_head->m_next;
             while(next){
-std::cout<<next->m_value<<" "<<t<<" "<<first()<<" "<<curr->m_value<<std::endl;
+
               if(next->m_value == t){
-                  std::cout<<next->m_value<<"FOUNND\n";
-                node<T> *next_next = next->m_next;
-                delete next;
-                curr->m_next = next_next;
-                m_count--;
-                return true;
+                    node<T> *next_next = next->m_next;
+                    delete next;
+                    curr->m_next = next_next;
+                    if(next_next == nullptr)//we removed the last element
+                        m_tail = nullptr;
+                    m_count--;
+                    return true;
               }
 
               curr = next;
@@ -270,13 +269,9 @@ std::cout<<next->m_value<<" "<<t<<" "<<first()<<" "<<curr->m_value<<std::endl;
 }
 
 bool contains(const T &t) const {
-//bool contains(const Iterator s, const Iterator e, T value ) const  {
-  return DSL::contains(begin() , end() , t);/*
-  for(auto it = begin(); it != end() ;it++)
-    if(*it == t)
-    return true;
 
-  return false;*/
+  return DSL::contains(begin() , end() , t);
+
 }
 
 

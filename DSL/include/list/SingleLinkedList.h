@@ -240,22 +240,32 @@ int removeAll(const T &t){
 
 
 bool removeOne(const T &t){
+
         if(isEmpty())
             return false;
-        std::cout<<"here"<<size()<<std::endl;
-        node<T> *curr = m_head;
-        node<T> *next = m_head->m_next;
-        while(curr != next){
-          if(next->m_value == t){
-            node<T> *next_next = next->m_next;
-            delete next;
-            curr->m_next = next_next;
-            m_count--;
+        if(first()==t){
+            takeFirst();
             return true;
-          }
-          curr = next;
-          next = next ->m_next;
-        }
+
+        }else if(size() >= 2){
+            std::cout<<size()<<" "<<std::endl;
+            node<T> *curr = m_head->m_next;
+            node<T> *next = m_head->m_next->m_next;
+            while(next){
+std::cout<<next->m_value<<" "<<t<<" "<<first()<<" "<<curr->m_value<<std::endl;
+              if(next->m_value == t){
+                  std::cout<<next->m_value<<"FOUNND\n";
+                node<T> *next_next = next->m_next;
+                delete next;
+                curr->m_next = next_next;
+                m_count--;
+                return true;
+              }
+
+              curr = next;
+              next = next ->m_next;
+            }
+    }
         return false;
 }
 

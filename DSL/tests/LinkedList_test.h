@@ -33,7 +33,7 @@ INSTANTIATE_TEST_CASE_P(
     size_list,
     SinleLinkedListTest,
     //Values(0 , 1 , 2 , 3 , 5 , 10 , 100 ,1000 , 10000 )
-Values( 30 , 50 )
+Values( 10 , 11 , 12, 13,10, 50 )
     );
 
 TEST_P(SinleLinkedListTest, takeFirst){
@@ -190,12 +190,16 @@ TEST_P(SinleLinkedListTest, algorithm_all_of_any_of){
 
 
 TEST_P(SinleLinkedListTest, removeOne){
-    int i = SIZE;
-    while(i> 3){
-        ASSERT_EQ(LL.size(),i);
-        int v=LL.removeOne(i);
-        ASSERT_EQ(LL.size(),i-1);
-        i--;
+    int i = 2;
+    while(i < SIZE){
+        std::cout<<"looking for "<<i<<std::endl;
+        DSL::print(LL.begin(), LL.end());
+        bool cont = LL.contains(i);
+       bool rem = LL.removeOne(i);
+
+        ASSERT_EQ(rem,cont) << SIZE;
+        //ASSERT_EQ(LL.size(),i-1);
+        i++;
     }
 }
 

@@ -10,6 +10,20 @@
 
 namespace DSL {
 
+template< typename  Iterator ,  typename Lambda >
+void for_each(Iterator s, Iterator e, Lambda l){
+    while(s != e){
+        l(*s);
+        s++;
+    }
+}
+
+template<  typename  Iterator >
+void print(Iterator s, Iterator e){
+    auto l = [=](auto &t){std::cout << t<< " ";};
+    for_each(s,e,l);
+    std::cout<<"\n";
+}
 
 //this has to be specialized for each class that is SWAPPABLE
     template< class T >
@@ -112,7 +126,7 @@ D count(Iterator s , Iterator e , const T &t)  {
     D fold( Iterator s, Iterator e, const D &a, Lambda l){
     	D acc = a ;
     	while(s != e){
-        
+
     		 acc = l(acc,*s);
              s++;
          }

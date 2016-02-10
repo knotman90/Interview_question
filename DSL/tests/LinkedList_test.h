@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <list/SingleLinkedList.h>
-#include<algorithm/algorithm.h>
+#include <algorithm/algorithm.h>
 
 
 
@@ -110,7 +110,7 @@ int numPrimesUpTo(const int N){
 
 //counts the number of primes from 0 to SIZE
 TEST_P(SinleLinkedListTest, algorithm_count_if){
-    
+
         const int NPRIMES=numPrimesUpTo(SIZE); //change according to SIZE
         int val = DSL::count_if(LL.begin() , LL.end() , isPrime<int> );
         printf("\t\tpi([0,%i]) = %i | FOUND = %i\n", SIZE , NPRIMES , val);

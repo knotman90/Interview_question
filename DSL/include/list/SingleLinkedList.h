@@ -59,18 +59,19 @@ typedef unsigned int uint;
  *         The second template parameter is used as type of the  Lists's size.
  *
  */
-template<typename T, typename C = int,
+template<typename T, typename C = int, template <typename> class NODE = node,
             template <typename ,
                     template<typename, typename...> class _Iterable, typename... Args> class _Iterator = forward_iterator
+
      >
 class SingleLinkedList {
 
 
 
-typedef _Iterator<T, node> Iterator;
+typedef _Iterator<T, NODE> Iterator;
 
-node<T>* m_head;
-node<T>* m_tail;
+NODE<T>* m_head;
+NODE<T>* m_tail;
 C m_count;
 
 public:
@@ -94,15 +95,15 @@ inline bool operator!=(const SingleLinkedList &l) const
 }
 
 
-forward_iterator<T, node> begin() const {
-        forward_iterator<T, node> fi(m_head);
+Iterator begin() const {
+        Iterator fi(m_head);
         return fi;
 }
 
 
 Iterator end() const  {
         //Iterator fi(m_tail);
-        auto e = m_tail == nullptr ? nullptr : m_tail->next();
+        NODE<T>* e =  static_cast<NODE<T>*> (m_tail == nullptr ? nullptr : m_tail->next());
         Iterator fi (e);
         return fi;
 }
@@ -125,10 +126,10 @@ void clear_via_iterator(){
 
 }
 void clear(){
-        node<T>* n = nullptr;
+        NODE<T>* n = nullptr;
         int i=0;
         while(m_head != nullptr) {
-                n = m_head->m_next;
+                n =  static_cast<NODE<T>*> (m_head->m_next);
                 delete m_head;
                 m_head=n;
                 m_count--;
@@ -138,7 +139,7 @@ void clear(){
 }
 
 void append( T& v){
-        node<T>* n = new node<T>(v);
+        NODE<T>* n = new NODE<T>(v);
         if(isEmpty()) {
                 m_head = n;
                 m_tail = n;
@@ -150,7 +151,7 @@ void append( T& v){
 }
 
 void prepend(const T& v){
-        node<T>* n = new node<T>(v);
+        NODE<T>* n = new NODE<T>(v);
         if(isEmpty()) {
                 m_head = n;
                 m_tail = n;
@@ -189,7 +190,7 @@ T takeFirst(){
         }
         T elem = first();
 
-        node<T>* head_next = m_head->m_next;
+        NODE<T>* head_next = static_cast<NODE<T>*> (m_head->m_next);
 
         delete m_head;
         m_count--;
@@ -205,11 +206,11 @@ T takeLast(){
         }
 
         T elem = last();
-        node<T>* next_to_last = m_head;
+        NODE<T>* next_to_last = m_head;
 
         //size >= 2
         while( next_to_last->m_next != m_tail)
-                next_to_last = next_to_last->m_next;
+                next_to_last =  static_cast<NODE<T>*> (next_to_last->m_next);
 
         delete m_tail;
         m_count--;
@@ -222,11 +223,11 @@ T takeLast(){
 //use fold when backwards iterator are present
 int removeAll(const T &t){
     uint n_rem = 0;
-    node<T> *curr = m_head;
-    node<T> *next = m_head->m_next;
+    NODE<T> *curr = m_head;
+    NODE<T> *next = m_head->m_next;
     while(curr != next){
       if(next->m_value == t){
-        node<T> *next_next = next->m_next;
+        NODE<T> *next_next =  static_cast<NODE<T>*> (next->m_next);
         delete next;
         curr->m_next = next_next;
         m_count--;
@@ -247,12 +248,12 @@ bool removeOne(const T &t){
             return true;
 
         }else if(size() >= 2){
-            node<T> *curr = m_head;
-            node<T> *next = m_head->m_next;
+            NODE<T> *curr = m_head;
+            NODE<T> *next = m_head->m_next;
             while(next){
 
               if(next->m_value == t){
-                    node<T> *next_next = next->m_next;
+                    NODE<T> *next_next = next->m_next;
                     delete next;
                     curr->m_next = next_next;
                     if(next_next == nullptr)//we removed the last element

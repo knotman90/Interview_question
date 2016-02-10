@@ -44,10 +44,16 @@ file(GLOB SRC_ALGORITHM
     "source/algorithm/*.cpp"
 )
 
+file(GLOB SRC_VECTOR
+    "include/vector/*.h"
+    "source/vector/*.cpp"
+)
 
 
 
-add_library(DSL ${SHAREDORSTATIC} ${SRC_MEMORY} ${COMMON_SRC} ${SRC_LIST} ${SRC_ALGORITHM})
+
+
+add_library(DSL ${SHAREDORSTATIC} ${SRC_MEMORY} ${COMMON_SRC} ${SRC_LIST} ${SRC_ALGORITHM} ${SRC_VECTOR})
 set_target_properties(DSL PROPERTIES VERSION "${DSL_VERSION}" SOVERSION "${DSL_MAJOR_VERSION}" LINKER_LANGUAGE CXX)
 set_property(TARGET DSL PROPERTY CXX_STANDARD 14)
 
@@ -57,4 +63,3 @@ if(${BUILD_TESTS} STREQUAL "ON")
        add_subdirectory(tests)
         #install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL)
 endif()
-

@@ -26,23 +26,23 @@ public:
 };
 
 template< typename Payload>
-class backward_iterable : forward_iterable< Payload > {
+class backward_iterable : public forward_iterable< Payload > {
 
   public:
-    backward_iterable();
-    virtual ~backward_iterable();
-    virtual backward_iterable* previous() = 0;
+    backward_iterable(){};
+    virtual ~backward_iterable(){};
+    virtual backward_iterable *previous() = 0;
 
 };
 
-template< typename Payload, typename Numeric >
-class random_iterable : backward_iterable< Payload >{
+template< typename Payload, typename Numeric = int >
+class random_iterable : public backward_iterable< Payload >{
 
   public:
-    random_iterable();
-    virtual ~random_iterable();
+    random_iterable(){};
+    virtual ~random_iterable(){};
 
-    virtual random_iterable* elemAt(Numeric element) = 0;
+    virtual random_iterable *elemAt(Numeric element) = 0;
 
 };
 
@@ -80,10 +80,10 @@ inline bool operator==(const sequential_forward_iterator &o) const { return m_i 
 inline bool operator!=(const sequential_forward_iterator &o) const { return m_i != o.m_i; }
 
 //pre-increment operator (return a reference)
-inline sequential_forward_iterator &operator++() { m_i = m_i->next(); return *this; }
+inline sequential_forward_iterator &operator++() { m_i = static_cast<iterable_pointer>(m_i->next()); return *this; }
 //post-increment operator (return a value)
 
-inline sequential_forward_iterator operator++(int) { sequential_forward_iterator n = *this; m_i = m_i->next(); return n; }
+inline sequential_forward_iterator operator++(int) { sequential_forward_iterator n = *this; m_i = static_cast<iterable_pointer>(m_i->next()); return n; }
 
 
 protected:
@@ -155,7 +155,7 @@ typedef _Iterable<Payload,Args...> Iterable;
     typedef Payload payload_value_type;
     typedef Payload* payload_pointer;
     typedef Payload& payload_reference;
-
+public:
   inline backward_iterator() {}
   inline backward_iterator(iterable_pointer n) : forward_iterator<Payload, _Iterable, Args...>(n) {}
   inline backward_iterator(const backward_iterator &o) : forward_iterator<Payload, _Iterable, Args...>(o) {}
@@ -202,7 +202,7 @@ class random_access_iterator : public backward_iterator<Payload, _Iterable, Args
   inline random_access_iterator(const random_access_iterator &o) : backward_iterator<Payload, _Iterable, Args...>(o) {}
 
 template <typename D = uint>
-inline payload_value_type operator[](D offset){
+inline payload_reference operator[](D offset){
     random_access_iterator i = *this;
     i.m_i = i.m_i->elemAt(offset);
     return *i;

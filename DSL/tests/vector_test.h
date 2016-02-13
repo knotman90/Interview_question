@@ -35,7 +35,7 @@ INSTANTIATE_TEST_CASE_P(
         Values( 10, 11, 12, 13,10, 50 )
         );
 
-TEST_P(vectorTest, size){
+TEST_P(vectorTest, capacityScale){
     ASSERT_EQ(V.capacity(),1);
     ASSERT_EQ(V.size(),0);
     int oldsize= V.capacity();

@@ -1,19 +1,8 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 cmake_policy(SET CMP0048 NEW)
 
-include(configure.cmake)
-
-
-project(DSL VERSION ${OPENCAL_VERSION} LANGUAGES  CXX)
-
-
-if ( ENABLE_SHARED )
-        set( SHAREDORSTATIC SHARED )
-else()
-        set( SHAREDORSTATIC STATIC )
-endif()
-
-add_definitions( -DPACKAGE="OPENCAL" -DVERSION="${OPENCAL_VERSION}" )
+#project(DSL VERSION ${DSL_VERSION} LANGUAGES  CXX)
+add_definitions( -DPACKAGE="DSL" -DVERSION="${OPENCAL_VERSION}" )
 
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)

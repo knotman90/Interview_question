@@ -10,7 +10,7 @@
 
 namespace DSL {
 
-//basic cimplementation calls <operator
+//basic cimplementation calls >operator
 template <typename T>
 constexpr bool greater(const T &lhd, const T &rhs){
     return lhd > rhs;

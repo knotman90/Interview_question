@@ -215,7 +215,10 @@ TEST_P(SinleLinkedListTest, removeOne){
 }
 
 
+TEST_P(SinleLinkedListTest, OPERATOR_EQUALEQUAL){
+    ASSERT_EQ(1,0);
 
+}
 
 
 

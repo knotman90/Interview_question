@@ -134,6 +134,19 @@ D count(Iterator s , Iterator e , const T &t)  {
     }
 
 
+    template<class T>
+    T& min(T& op1, T& op2){
+        if(op1 < op2)
+            return op1;
+        return op2;
+    }
+
+template<class T>
+T& max(T& op1, T& op2){
+    if(op1 > op2)
+        return op1;
+    return op2;
+}
 
 }/* namespace DSL */
 

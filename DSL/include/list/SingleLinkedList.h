@@ -35,8 +35,9 @@ namespace DSL {
             return m_value;
     }
 
-    explicit node( T& v) : m_value(v), m_next(nullptr) {
+    explicit node(const T& v) : m_value(v), m_next(nullptr) {
     }
+
     ~node(){
     };
 
@@ -88,7 +89,16 @@ inline int size() const {
         return m_count;
 }
 
-bool operator==(const SingleLinkedList &l) const;
+bool operator==(const SingleLinkedList &l) const{
+    if(this->size() != l.size())
+        return false;
+    for(auto it=begin(), it1=l.begin() ; it != end() ; it++ , it1++){
+        if(*it != *it1)
+            return false;
+    }
+    return true;
+
+}
 inline bool operator!=(const SingleLinkedList &l) const
 {
         return !(*this==l);
@@ -138,7 +148,7 @@ void clear(){
         m_tail = nullptr;
 }
 
-void append( T& v){
+void append(const  T& v){
         NODE<T>* n = new NODE<T>(v);
         if(isEmpty()) {
                 m_head = n;

@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <LinkedListQuestions.h>
-
+#include <misc.h>
 int main(int argc, char** argv){
 
 

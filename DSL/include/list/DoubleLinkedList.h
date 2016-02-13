@@ -20,7 +20,7 @@ public:
 
 
 
-explicit backward_node( T& v) : DSL::node<T>(v), m_previous(nullptr) {
+explicit backward_node(const T& v) : DSL::node<T>(v), m_previous(nullptr) {
 }
 
 ~backward_node(){

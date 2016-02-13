@@ -62,7 +62,7 @@ bool operator<( const pair<T,D>& lhs, const pair<T,D>& rhs ){
 }
 
 template<typename T, typename D>
-inline pair<T,D>make_pair(const T &f , const D &s){
+inline pair<T,D> make_pair(const T &f , const D &s){
     return pair<T , D>(f , s);
 }
 

@@ -16,7 +16,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
 include_directories(${CMAKE_SOURCE_DIR}/src/LinkedList)
+include_directories(${CMAKE_SOURCE_DIR}/src//Miscellanous)
 include_directories(${CMAKE_SOURCE_DIR}/DSL/include/)
+
+file(GLOB SRC_MISC
+    "src/Miscellanous/*.h"
+    "src/Miscellanous/*.cpp"
+)
 
 file(GLOB SRC_LINKED_LIST
     "src/LinkedList/*.h"
@@ -30,7 +36,7 @@ file(GLOB SRC_TOP_LEVEL
 
 add_subdirectory(DSL)
 
-add_executable(InterviewQuestion ${SRC_TOP_LEVEL} ${SRC_LINKED_LIST})
+add_executable(InterviewQuestion  ${SRC_MISC} ${SRC_LINKED_LIST} ${SRC_TOP_LEVEL})
 target_link_libraries(InterviewQuestion DSL ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
 SET_TARGET_PROPERTIES(InterviewQuestion PROPERTIES LINKER_LANGUAGE CXX)
 set_property(TARGET InterviewQuestion PROPERTY CXX_STANDARD 14)
